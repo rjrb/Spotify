@@ -65,7 +65,9 @@ exports.callback = async (req, res) => {
 		if (response.status == 200) {
 			const access_token = response.data.access_token;
 			const refresh_token = response.data.refresh_token;
+			const expires_in = response.data.expires_in;
 			console.log("Access Token: ", access_token);
+			console.log("Access Token expires in: ", expires_in);
 
 			localStorage.setItem('access_token', access_token);
 			let expiration = new Date();
