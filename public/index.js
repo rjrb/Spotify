@@ -11,8 +11,6 @@ class Spotify {
     }
 
     initialize() {
-        $("#loading").hide();
-
         $("#load-songs").click(() => this.loadSongs());
         $("#match-songs").click(() => this.matchSongs());
         $("#register-songs").click(() => this.markSavedSongs());
@@ -20,11 +18,14 @@ class Spotify {
         $.getJSON(`${this.baseUrl}/token`)
             .then(message => {
                 console.log(message);
+                this.disableButtons(false);
             })
             .catch(err => {
                 console.log("No valid token found", err.responseJSON.message, err.status);
                 console.error(err);
+                this.disableButtons(true);
             })
+            .always(() => $("#loading").hide())
         ;
     }
 
@@ -87,9 +88,13 @@ class Spotify {
 
     changeStatus(inProcess) {
         $("#loading").toggle();
-        $("#load-songs").prop('disabled', inProcess);
-        $("#match-songs").prop('disabled', inProcess);
-        $("#register-songs").prop('disabled', inProcess);
+        this.disableButtons(inProcess)
+    }
+
+    disableButtons(disable) {
+        $("#load-songs").prop('disabled', disable);
+        $("#match-songs").prop('disabled', disable);
+        $("#register-songs").prop('disabled', disable);
     }
 
 }

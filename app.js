@@ -18,6 +18,6 @@ app
 ;
 
 console.log(localStorage.getItem("access_token"));
-console.log(new Date(parseInt(localStorage.getItem("expiration"))));
+console.log(new Date(parseInt(localStorage.getItem("expiration"))).toLocaleString());
 
 module.exports = app;
