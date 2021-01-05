@@ -1,0 +1,21 @@
+{
+  "name": "spotify",
+  "author": "Ricardo Ramírez",
+  "version": "1.0.0",
+  "description": "App to sync my songs as 'saved songs' on Spotify",
+  "main": "app.js",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.21.1",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "music-metadata": "^7.6.1",
+    "node-localstorage": "^2.1.6",
+    "querystring": "^0.2.0",
+    "sequelize": "^6.3.5",
+    "sqlite3": "^5.0.0",
+    "uuid": "^8.3.2"
+  }
+}
