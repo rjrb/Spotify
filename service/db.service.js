@@ -26,8 +26,8 @@ exports.findSongsToMatch = () => {
 	return Song.findAll({
 		where: {
 			match: true, 
-			matched: false,
-			synced: false
+			matched: false, 
+			synced: false, 
 		}
 	});
 };
@@ -36,6 +36,7 @@ exports.setSpotifyId = (song, item) => {
 	if (Array.isArray(item)) {
 		song.spotifyAlts = JSON.stringify(item);
 	} else {
+		song.spotifyAlts = null;
 		song.spotifyId = item.id;
 		song.matched = true;
 	}

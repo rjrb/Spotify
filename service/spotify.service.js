@@ -1,5 +1,7 @@
 const axios = require('axios');
-const { TrackInfo } = require('../model/track_info');
+const { TrackInfo } = require('../model/track.model');
+const { SimpleTrackInfo } = require('../model/simple.model');
+const isEqual = require('lodash.isequal');
 
 exports.searchSong = (song, access_token) => {
 	let urlGet = "https://api.spotify.com/v1/search?" +
@@ -29,7 +31,7 @@ exports.extractTrackInfo = (song, items) => {
 	if(items.length == 0) {
 		return [];
 	}
-	if (items.length > 1) {
+	if (items.length > 1 && !this.allItemsSameSong(items)) {
 		console.log(`Multiple options available for ${song.title}`);
 		return items.map(item => this.createTrackInfo(item));
 	} else {
@@ -37,8 +39,16 @@ exports.extractTrackInfo = (song, items) => {
 	}
 };
 
+exports.allItemsSameSong = (items) => {
+	return items.map( item => this.createSimpleTrackInfo(item) ).every( (val, i, arr) => isEqual(val, arr[0]) );
+};
+
 exports.createTrackInfo = (item) => {
 	return new TrackInfo(item.id, item.artists[0].name, item.name, item.album.name, parseInt(item.album.release_date));
+};
+
+exports.createSimpleTrackInfo = (item) => {
+	return new SimpleTrackInfo(item.artists[0].name, item.name, item.album.name);
 };
 
 exports.registerSavedSongs = (spotifyIds, access_token) => {
@@ -64,7 +74,14 @@ exports.registerSavedSongs = (spotifyIds, access_token) => {
 	;
 };
 
-const regex = /\W|&/gi;
+const regexSpecialChars = /\W|&/gi;
+const regexAccents = /[\u0300-\u036f]/g;
 exports.prepareForQuery = (value) => {
-	return value.trim().replace(regex, ' ').split(/\s+/).join('+');
+	return value
+		.trim()
+		.normalize("NFD").replace(regexAccents, "")
+		.replace(regexSpecialChars, ' ')
+		.split(/\s+/)
+		.join('+')
+	;
 };
