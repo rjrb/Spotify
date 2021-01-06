@@ -17,7 +17,7 @@ exports.persistSong = (metadata) => {
 		}
 	})
 		.then(song => {
-			console.log(`Persisted song: ${song}`);
+			console.log(`Persisted song: ${song.title}`);
 			return song;
 		});
 };
@@ -26,13 +26,13 @@ exports.findSongsToMatch = () => {
 	return Song.findAll({
 		where: {
 			match: true, 
+			matched: false,
 			synced: false
 		}
 	});
 };
 
 exports.setSpotifyId = (song, item) => {
-	console.log(song.title, item);
 	if (Array.isArray(item)) {
 		song.spotifyAlts = JSON.stringify(item);
 	} else {
