@@ -37,7 +37,7 @@ class Spotify {
         const ini = new Date();
         this.changeStatus(true);
         try {
-            let data = await $.getJSON(`${this.baseUrl}/load`);
+            let data = await $.post(`${this.baseUrl}/load`);
             const fin = new Date();
             alert("Successfully loaded songs into database.\n" + JSON.stringify(data) + "\nElapsed: " + (fin - ini) + "ms");
         } catch (e) {
@@ -56,7 +56,7 @@ class Spotify {
         const ini = new Date();
         this.changeStatus(true);
         try {
-            let data = await $.getJSON(`${this.baseUrl}/match`);
+            let data = await $.post(`${this.baseUrl}/match`);
             const fin = new Date();
             alert("Successfully matched songs with Spotify.\n" + JSON.stringify(data) + "\nElapsed: " + (fin - ini) + "ms");
         } catch (e) {
@@ -75,7 +75,7 @@ class Spotify {
         const ini = new Date();
         this.changeStatus(true);
         try {
-            let data = await $.getJSON(`${this.baseUrl}/save`);
+            let data = await $.post(`${this.baseUrl}/save`);
             const fin = new Date();
             alert("Successfully marked saved songs in Spotify.\n" + JSON.stringify(data) + "\nElapsed: " + (fin - ini) + "ms");
         } catch (e) {

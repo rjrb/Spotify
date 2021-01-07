@@ -3,6 +3,8 @@ const loginService = require("../service/login.service");
 const matchService = require("../service/match_music_to_spotify.service");
 const markSavedService = require("../service/mark_saved_songs_in_spotify.service");
 const sessionService = require("../service/session.service");
+const dbService = require("../service/db.service");
+const { CompareInfo } = require("../model/compare.model");
 
 
 exports.isTokenValid = async (req, res) => {
@@ -36,8 +38,9 @@ exports.matchSongsWithSpotify = async (req, res) => {
 		let total = await matchService.matchSongsWithSpotify();
 		res.status(200).json({ message: "Success matching songs with Spotify", size: total });
 	} catch (e) {
-		console.error("Error matching songs against Spotify", e);
-		res.status(500).json({ message: "Error matching songs against Spotify", error: e });
+		const errorMessage = "Error matching songs against Spotify";
+		console.error(errorMessage, e);
+		res.status(500).json({ message: errorMessage, error: e });
 	}
 };
 
@@ -46,7 +49,34 @@ exports.markSavedSongsInSpotify = async (req, res) => {
 		let total = await markSavedService.markSavedSongsInSpotify();
 		res.status(200).json({ message: "Success marking saved songs in Spotify", size: total });
 	} catch (e) {
-		console.error("Error matching songs against Spotify", e);
-		res.status(500).json({ message: "Error marking saved songs in Spotify", error: e });
+		const errorMessage = "Error matching songs against Spotify";
+		console.error(errorMessage, e);
+		res.status(500).json({ message: errorMessage, error: e });
+	}
+};
+
+exports.getSongsToManuallyValidate = async (req, res) => {
+	try {
+		let songs = await dbService.findSongsToManuallyValidate(req.query);
+		let compareItems = songs.map(song => new CompareInfo(song.id, song.artist, song.title, song.album, song.year, JSON.parse(song.spotifyAlts)));
+		res.send(compareItems);
+	} catch (e) {
+		const errorMessage = "Error fetching songs to manually match against Spotify options";
+		console.error(errorMessage, e);
+		res.status(500).send({ message: errorMessage, error: e });
+	}
+};
+
+exports.setMatchedSong = async (req, res) => {
+	const songId = req.params.id;
+	const spotifyId = req.body.spotifyId;
+
+	try {
+		await dbService.setMatched(songId, spotifyId);
+		res.status(204).json();
+	} catch (e) {
+		const errorMessage = `Error setting song ${songId} as matched`;
+		console.error(errorMessage, e);
+		res.status(500).send({ message: errorMessage, error: e });
 	}
 };

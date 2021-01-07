@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser')
 require('dotenv').config();
 
 const routes = require('./routes');
@@ -14,6 +15,7 @@ app
 	.use('/spotify', express.static(__dirname + '/public'))
 	.use(cors())
 	.use(cookieParser())
+	.use(bodyParser.json())
 	.use('/spotify', routes)
 	.listen(port, () => console.info(`Started server on port ${port}`))
 ;

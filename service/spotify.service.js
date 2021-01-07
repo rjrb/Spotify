@@ -9,7 +9,7 @@ exports.searchSong = (song, access_token) => {
 		`&` +
 		`type=track` +
 		`&` +
-		`&market=CO`
+		`market=CO`
 	;
 	console.log(urlGet);
 

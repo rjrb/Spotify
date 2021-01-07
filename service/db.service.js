@@ -1,4 +1,5 @@
 const Song = require('../config/db.config');
+const { Op } = require('sequelize');
 
 exports.persistSong = (metadata) => {
 	return Song.findOrCreate({
@@ -28,7 +29,7 @@ exports.findSongsToMatch = () => {
 			match: true, 
 			matched: false, 
 			synced: false, 
-		}
+		}, 
 	});
 };
 
@@ -61,6 +62,48 @@ exports.setSynced = (spotifyIds) => {
 		{
 			where: {
 				spotifyId: spotifyIds
+			}
+		}
+	);
+};
+
+exports.findSongsToManuallyValidate = (query) => {
+	const { page, size, artist, title } = query;
+	const limit = size ? +size : 1;
+	const offset = page ? +page * limit : 0;
+
+	let condition = {
+		match: true, 
+		matched: false, 
+		synced: false, 
+		spotifyAlts: { [Op.not]: null}
+	};
+
+	if(artist) {
+		condition.artist = { [Op.like]: `%${artist}%` };
+	}
+
+	if(title) {
+		condition['title'] = { [Op.like]: `%${title}%` };
+	}
+
+	return Song.findAll({
+		limit: limit, 
+		offset: offset, 
+		where: condition, 
+		order: [['artist', 'ASC'], ['title', 'ASC']]
+	});
+};
+
+exports.setMatched = (songId, spotifyId) => {
+	return Song.update(
+		{
+			spotifyId: spotifyId, 
+			matched: true
+		},
+		{
+			where: {
+				id: songId
 			}
 		}
 	);
