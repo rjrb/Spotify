@@ -66,14 +66,14 @@ exports.callback = async (req, res) => {
 			const access_token = response.data.access_token;
 			const refresh_token = response.data.refresh_token;
 			const expires_in = response.data.expires_in;
-			console.log("Access Token: ", access_token);
-			console.log("Access Token expires in: ", expires_in);
-
-			localStorage.setItem('access_token', access_token);
+			
 			let expiration = new Date();
-			expiration.setMinutes(expiration.getMinutes() + 59);
+			expiration.setSeconds(expiration.getSeconds() + expires_in);
+			localStorage.setItem('access_token', access_token);
 			localStorage.setItem('expiration', expiration.getTime())
 			localStorage.setItem('refresh_token', refresh_token);
+			console.log("Access Token: ", access_token);
+			console.log("Access Token expiration: ", expiration);
 
 			const options = {
 				url: 'https://api.spotify.com/v1/me',
@@ -90,7 +90,7 @@ exports.callback = async (req, res) => {
 				})
 			;
 
-			res.redirect('/spotify/#' +	querystring.stringify({access_token: access_token, refresh_token: refresh_token}));
+			res.redirect('/spotify/#' +	querystring.stringify({access_token: access_token}));
 		}
 
 	} catch (error) {
@@ -98,4 +98,61 @@ exports.callback = async (req, res) => {
 		res.redirect('/spotify/#' + querystring.stringify({error: 'invalid_token'}));
 	}
 
+};
+
+exports.refreshToken = async (req, res) => {
+	try {
+		this.executeRefresh();
+		return res.redirect('/spotify/#' +	querystring.stringify({access_token: access_token}));
+	} catch (e) {
+		console.log(e);
+		if(e.name === "no_refresh_token") {
+			return res.status(401).send({message: "Please login"});
+		} else if (e.name === "failed_to_refresh_token") {
+			return res.redirect('/spotify/#' + querystring.stringify({error: 'invalid_refresh_token'}));
+		}
+	}
+};
+
+exports.executeRefresh = async () => {
+	if(!localStorage.getItem("refresh_token")) {
+		console.log(`No refresh token found. Please login`);
+		throw {
+			name: "no_refresh_token",
+			message: "No refresh token found. Please login"
+		};
+	}
+
+	console.log(`Attempting to get new access token`);
+	const refresh_token = localStorage.getItem("refresh_token");
+	const params = new URLSearchParams();
+	params.append('refresh_token', refresh_token);
+	params.append('grant_type', 'refresh_token');
+
+	const authOptions = {
+		headers: {
+			'Authorization': 'Basic ' + Buffer.from(client_id + ':' + client_secret, 'utf-8').toString("base64"),
+			'Content-Type': 'application/x-www-form-urlencoded'
+		}
+	};
+
+	try {
+		let response = await axios.post('https://accounts.spotify.com/api/token', params, authOptions)
+		if (response.status == 200) {
+			const access_token = response.data.access_token;
+			const expires_in = response.data.expires_in;
+			
+			let expiration = new Date();
+			expiration.setSeconds(expiration.getSeconds() + expires_in);
+			localStorage.setItem('access_token', access_token);
+			localStorage.setItem('expiration', expiration.getTime())
+			console.log("Refreshed Access Token: ", access_token);
+			console.log("Access Token expiration: ", expiration);
+		}
+	} catch (e) {
+		console.error(e);
+		throw {
+			name: "failed_to_refresh_token"
+		};
+	}
 };

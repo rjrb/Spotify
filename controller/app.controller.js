@@ -17,6 +17,10 @@ exports.callback = async (req, res) => {
 	loginService.callback(req, res);
 };
 
+exports.refreshToken = async (req, res) => {
+	loginService.refreshToken(req, res);
+};
+
 exports.loadSongsIntoDb = async (req, res) => {
 	try {
 		let total = await loadService.loadFilesToDatabase();

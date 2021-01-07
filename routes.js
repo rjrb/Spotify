@@ -6,6 +6,7 @@ const router = express.Router();
 router.get("/ping", (req, res) => { res.send({ ping: uuidv4() }) });
 router.get("/login", appController.login);
 router.get("/callback", appController.callback);
+router.get("/refresh", appController.refreshToken);
 router.get("/load", appController.loadSongsIntoDb);
 router.get("/match", appController.matchSongsWithSpotify);
 router.get("/save", appController.markSavedSongsInSpotify);
