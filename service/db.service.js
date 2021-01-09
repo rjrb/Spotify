@@ -68,7 +68,7 @@ exports.setSynced = (spotifyIds) => {
 	);
 };
 
-exports.findSongsToManuallyValidate = (query) => {
+exports.findSongsToManuallyValidate = async (query) => {
 	const { page, size, artist, title } = query;
 	const limit = size ? +size : 1;
 	const offset = page ? +page * limit : 0;
@@ -88,12 +88,20 @@ exports.findSongsToManuallyValidate = (query) => {
 		condition['title'] = { [Op.like]: `%${title}%` };
 	}
 
-	return Song.findAndCountAll({
+	const result = await Song.findAndCountAll({
 		limit: limit,
 		offset: offset,
 		where: condition,
 		order: [['artist', 'ASC'], ['title', 'ASC']]
 	});
+
+	return {
+		items: result.rows,
+		totalItems: result.count, 
+		currentPage: page, 
+		totalPages: Math.ceil(result.count / limit),
+		size: size
+	};
 };
 
 exports.setMatched = (songId, spotifyId) => {

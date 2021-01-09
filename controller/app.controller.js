@@ -58,7 +58,9 @@ exports.markSavedSongsInSpotify = async (req, res) => {
 exports.getSongsToManuallyValidate = async (req, res) => {
 	try {
 		let songs = await dbService.findSongsToManuallyValidate(req.query);
-		let compareItems = songs.rows.map(song => new CompareInfo(song.id, song.artist, song.title, song.album, song.genre, song.year, JSON.parse(song.spotifyAlts)));
+		let {totalItems, currentPage, totalPages, size} = songs;
+		console.log(totalItems, currentPage, totalPages, size);
+		let compareItems = songs.items.map(song => new CompareInfo(song.id, song.artist, song.title, song.album, song.genre, song.year, JSON.parse(song.spotifyAlts)));
 		res.send(compareItems);
 	} catch (e) {
 		const errorMessage = "Error fetching songs to manually match against Spotify options";

@@ -88,33 +88,47 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <dl class="row position-fixed">
-                                    <dt class="col-sm-2">Artist:</dt><dd class="col-sm-10 text-left" id="info-artist"></dd>
-                                    <dt class="col-sm-2">Title:</dt><dd class="col-sm-10 text-left" id="info-title"></dd>
-                                    <dt class="col-sm-2">Album:</dt><dd class="col-sm-10 text-left" id="info-album"></dd>
-                                    <dt class="col-sm-2">Genre:</dt><dd class="col-sm-10 text-left" id="info-genre"></dd>
-                                    <dt class="col-sm-2">Year:</dt><dd class="col-sm-10 text-left" id="info-year"></dd>
-                                </dl>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="position-fixed" style="width: 380px;">
+                                        <div class="d-flex justify-content-center mb-3">
+                                            <button id="button-prev" type="button" class="btn btn-secondary mr-2">Previous</button>
+                                            <button id="button-next" type="button" class="btn btn-primary">Next</button>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-sm-3 font-weight-bold">Artist:</div><div class="col-sm-7" id="info-artist"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-3 font-weight-bold">Title:</div><div class="col-sm-7" id="info-title"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-3 font-weight-bold">Album:</div><div class="col-sm-7" id="info-album"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-3 font-weight-bold">Genre:</div><div class="col-sm-7" id="info-genre"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-3 font-weight-bold">Year:</div><div class="col-sm-7" id="info-year"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="info-alts" class="list-group col-sm-8"></div>
                             </div>
-                            <div id="info-alts" class="list-group col-sm-8"></div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
-                        <button id="button-prev" type="button" class="btn btn-secondary">Previous</button>
-                        <button id="button-next" type="button" class="btn btn-primary">Next</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Toast -->
-        <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;" data-delay="5000">
-            <div class="toast" style="position: absolute; top: 0; right: 0;">
+        <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;" data-delay="10000">
+            <div class="toast" style="position: absolute; top: 0; right: 2em; z-index: 7000">
                 <div class="toast-header">
-                    <img src="..." class="rounded mr-2" alt="...">
                     <strong class="mr-auto">Result</strong>
                     <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
