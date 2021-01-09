@@ -74,33 +74,20 @@ exports.registerSavedSongs = async (spotifyIds, access_token) => {
 	;
 };
 
-exports.enqueueSong = (spotifyId, access_token) => {
-	const urlPost = "https://api.spotify.com/v1/me/player/queue?" + querystring.stringify({uri: `spotify:track:${spotifyId}`});
+exports.playSong = (spotifyId, access_token) => {
+	const urlPut = "https://api.spotify.com/v1/me/player/play";
 	const options = {
 		headers: { 'Authorization': 'Bearer ' + access_token }
 	};
 
-	return axios.post(urlPost, null, options)
-		.then(response => {
-			console.log('Enqueue song statusCode:', response && response.status);
-			if (response.status != 204) {
-				throw "Error adding song to the queue"
-			}
-		})
-	;
-}
+	const body = {uris: [`spotify:track:${spotifyId}`]};
+	console.log(body);
 
-exports.playNextSong = async (access_token) => {
-	const urlPost = "https://api.spotify.com/v1/me/player/next";
-	const options = {
-		headers: { 'Authorization': 'Bearer ' + access_token }
-	};
-
-	return axios.post(urlPost, null, options)
+	return axios.put(urlPut, body, options)
 		.then(response => {
-			console.log('Play next song statusCode:', response && response.status);
+			console.log('Play song statusCode:', response && response.status);
 			if (response.status != 204) {
-				throw "Error requesting to play next song in queue"
+				throw "Error playing song"
 			}
 		})
 	;

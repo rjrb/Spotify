@@ -7,6 +7,5 @@ exports.playSong = async (spotifyId) => {
 	}
 
 	const access_token = localStorage.getItem("access_token")
-	await spotifyService.enqueueSong(spotifyId, access_token);
-	await spotifyService.playNextSong(access_token);
+	await spotifyService.playSong(spotifyId, access_token);
 };
