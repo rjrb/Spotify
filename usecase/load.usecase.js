@@ -1,5 +1,5 @@
-const { persistSong } = require("./db.service");
-const { readDirectory, parseFiles } = require("./file.service");
+const { persistSong } = require("../service/db.service");
+const { readDirectory, parseFiles } = require("../service/file.service");
 
 exports.loadFilesToDatabase = async () => {
 	const audioFiles = await readDirectory();

@@ -1,4 +1,5 @@
 const axios = require('axios');
+const querystring = require('querystring');
 const { TrackInfo } = require('../model/track.model');
 const { SimpleTrackInfo } = require('../model/simple.model');
 const isEqual = require('lodash.isequal');
@@ -27,7 +28,7 @@ exports.searchSong = (song, access_token) => {
 	;
 };
 
-exports.extractTrackInfo = (song, items) => {
+exports.extractTrackInfo = (items) => {
 	if(items.length == 0) {
 		return [];
 	}
@@ -50,7 +51,7 @@ exports.createSimpleTrackInfo = (item) => {
 	return new SimpleTrackInfo(item.artists[0].name, item.name, item.album.name);
 };
 
-exports.registerSavedSongs = (spotifyIds, access_token) => {
+exports.registerSavedSongs = async (spotifyIds, access_token) => {
 	let sids50 = spotifyIds.splice(0, 50);
 	if (sids50.length == 0) {
 		return;
@@ -69,6 +70,38 @@ exports.registerSavedSongs = (spotifyIds, access_token) => {
 				throw "Error registering saved songs"
 			}
 			return this.registerSavedSongs(spotifyIds, access_token);
+		})
+	;
+};
+
+exports.enqueueSong = (spotifyId, access_token) => {
+	const urlPost = "https://api.spotify.com/v1/me/player/queue?" + querystring.stringify({uri: `spotify:track:${spotifyId}`});
+	const options = {
+		headers: { 'Authorization': 'Bearer ' + access_token }
+	};
+
+	return axios.post(urlPost, null, options)
+		.then(response => {
+			console.log('Enqueue song statusCode:', response && response.status);
+			if (response.status != 204) {
+				throw "Error adding song to the queue"
+			}
+		})
+	;
+}
+
+exports.playNextSong = async (access_token) => {
+	const urlPost = "https://api.spotify.com/v1/me/player/next";
+	const options = {
+		headers: { 'Authorization': 'Bearer ' + access_token }
+	};
+
+	return axios.post(urlPost, null, options)
+		.then(response => {
+			console.log('Play next song statusCode:', response && response.status);
+			if (response.status != 204) {
+				throw "Error requesting to play next song in queue"
+			}
 		})
 	;
 };

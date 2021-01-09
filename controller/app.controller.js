@@ -1,10 +1,10 @@
-const loadService = require("../service/load_files_to_db.service");
 const loginService = require("../service/login.service");
-const matchService = require("../service/match_music_to_spotify.service");
-const markSavedService = require("../service/mark_saved_songs_in_spotify.service");
 const sessionService = require("../service/session.service");
-const dbService = require("../service/db.service");
-const { CompareInfo } = require("../model/compare.model");
+const loadUseCase = require("../usecase/load.usecase");
+const matchUseCase = require("../usecase/match.usecase");
+const saveUseCase = require("../usecase/save.usecase");
+const manualUseCase = require("../usecase/manual.usecase");
+const playUseCase = require("../usecase/player.usecase");
 
 
 exports.isTokenValid = async (req, res) => {
@@ -25,7 +25,7 @@ exports.refreshToken = async (req, res) => {
 
 exports.loadSongsIntoDb = async (req, res) => {
 	try {
-		let total = await loadService.loadFilesToDatabase();
+		let total = await loadUseCase.loadFilesToDatabase();
 		res.status(200).json({ message: "Success loading files into database", size: total });
 	} catch (e) {
 		console.error("Error in load files into database process", e);
@@ -35,7 +35,7 @@ exports.loadSongsIntoDb = async (req, res) => {
 
 exports.matchSongsWithSpotify = async (req, res) => {
 	try {
-		let total = await matchService.matchSongsWithSpotify();
+		let total = await matchUseCase.matchSongsWithSpotify();
 		res.status(200).json({ message: "Success matching songs with Spotify", size: total });
 	} catch (e) {
 		const errorMessage = "Error matching songs against Spotify";
@@ -46,7 +46,7 @@ exports.matchSongsWithSpotify = async (req, res) => {
 
 exports.markSavedSongsInSpotify = async (req, res) => {
 	try {
-		let total = await markSavedService.markSavedSongsInSpotify();
+		let total = await saveUseCase.markSavedSongsInSpotify();
 		res.status(200).json({ message: "Success marking saved songs in Spotify", size: total });
 	} catch (e) {
 		const errorMessage = "Error matching songs against Spotify";
@@ -57,11 +57,8 @@ exports.markSavedSongsInSpotify = async (req, res) => {
 
 exports.getSongsToManuallyValidate = async (req, res) => {
 	try {
-		let songs = await dbService.findSongsToManuallyValidate(req.query);
-		let {totalItems, currentPage, totalPages, size} = songs;
-		console.log(totalItems, currentPage, totalPages, size);
-		let compareItems = songs.items.map(song => new CompareInfo(song.id, song.artist, song.title, song.album, song.genre, song.year, JSON.parse(song.spotifyAlts)));
-		res.send(compareItems);
+		const response = await manualUseCase.getSongsToManuallyValidate(req.query);
+		res.send(response);
 	} catch (e) {
 		const errorMessage = "Error fetching songs to manually match against Spotify options";
 		console.error(errorMessage, e);
@@ -74,10 +71,22 @@ exports.setMatchedSong = async (req, res) => {
 	const spotifyId = req.body.spotifyId;
 
 	try {
-		await dbService.setMatched(songId, spotifyId);
+		await manualUseCase.setMatchedSong(songId, spotifyId);
 		res.status(204).json();
 	} catch (e) {
 		const errorMessage = `Error setting song ${songId} as matched`;
+		console.error(errorMessage, e);
+		res.status(500).send({ message: errorMessage, error: e });
+	}
+};
+
+exports.playSongInSpotifyPlayer = async (req, res) => {
+	const spotifyId = req.params.id;
+
+	try {
+		await playUseCase.playSong(spotifyId);
+	} catch (e) {
+		const errorMessage = `Error requesting song to play ${spotifyId}`;
 		console.error(errorMessage, e);
 		res.status(500).send({ message: errorMessage, error: e });
 	}

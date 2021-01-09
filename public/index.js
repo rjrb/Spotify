@@ -168,6 +168,15 @@ class Spotify {
         }
     }
 
+    async playSong(spotifyId) {
+        $.post(`${this.baseUrl}/play/${spotifyId}`)
+            .catch(error => {
+                console.log(error);
+                alert(`Error requesting to play song`);
+            })
+        ;
+    }
+
     changeStatus(inProcess) {
         this.showLoading(inProcess);
         this.disableButtons(inProcess)
@@ -189,6 +198,31 @@ class Spotify {
 
     generateListGroupItem(songId, spotifyInfo) {
         return `
+            <div class="list-group-item list-group-item-action" >
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <dl class="row">
+                                <dt class="col-sm-2">Artist:</dt><dd class="col-sm-10">${spotifyInfo.artist}</dd>
+                                <dt class="col-sm-2">Title:</dt><dd class="col-sm-10">${spotifyInfo.title}</dd>
+                                <dt class="col-sm-2">Album:</dt><dd class="col-sm-10">${spotifyInfo.album}</dd>
+                                <dt class="col-sm-2">Year:</dt><dd class="col-sm-10">${spotifyInfo.year}</dd>
+                            </dl>
+                        </div>
+                        <div class="col-sm-2 d-dlex flex-column align-items-center h-100">
+                            <button class="btn btn-primary btn-block" onclick="window.spotify.setSongMatched('${songId}', '${spotifyInfo.id}')">
+                                Match
+                            </button>
+                            <button class="btn btn-outline-success btn-block" onclick="window.spotify.playSong('${spotifyInfo.id}')">
+                                Play
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </button>
+        `;
+        /*
+        return `
             <button type="button" class="list-group-item list-group-item-action" onclick="window.spotify.setSongMatched('${songId}', '${spotifyInfo.id}')">
                 <div class="container">
                     <dl class="row">
@@ -200,6 +234,7 @@ class Spotify {
                 </div>
             </button>
         `;
+        */
     }
 
 }

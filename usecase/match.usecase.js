@@ -1,5 +1,5 @@
-const dbService = require("./db.service");
-const spotifyService = require("./spotify.service");
+const dbService = require("../service/db.service");
+const spotifyService = require("../service/spotify.service");
 const { localStorage } = require("../config/storage.config");
 
 exports.matchSongsWithSpotify = async () => {
@@ -17,7 +17,7 @@ exports.matchSongsWithSpotify = async () => {
 				console.log(`No match for ${song.artist} - ${song.title} - ${song.album}`);
 				continue;
 			}
-			let trackInfo = spotifyService.extractTrackInfo(song, spotifyInfo);
+			let trackInfo = spotifyService.extractTrackInfo(spotifyInfo);
 			if(Array.isArray(trackInfo)) {
 				console.log(`Multiple options available for ${song.artist} - ${song.title} - ${song.album}`);
 			} else {

@@ -13,5 +13,6 @@ router.post("/save", appController.markSavedSongsInSpotify);
 router.get("/token", appController.isTokenValid);
 router.get("/manual", appController.getSongsToManuallyValidate);
 router.patch("/songs/:id", appController.setMatchedSong);
+router.post("/play/:id", appController.playSongInSpotifyPlayer);
 
 module.exports = router;

@@ -1,5 +1,5 @@
-const dbService = require("./db.service");
-const spotifyService = require("./spotify.service");
+const dbService = require("../service/db.service");
+const spotifyService = require("../service/spotify.service");
 const { localStorage } = require("../config/storage.config");
 
 exports.markSavedSongsInSpotify = async (req, res) => {
