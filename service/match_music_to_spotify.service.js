@@ -14,9 +14,15 @@ exports.matchSongsWithSpotify = async () => {
 		try {
 			let spotifyInfo = await spotifyService.searchSong(song, localStorage.getItem("access_token"));
 			if (spotifyInfo.length == 0) {
+				console.log(`No match for ${song.artist} - ${song.title} - ${song.album}`);
 				continue;
 			}
 			let trackInfo = spotifyService.extractTrackInfo(song, spotifyInfo);
+			if(Array.isArray(trackInfo)) {
+				console.log(`Multiple options available for ${song.artist} - ${song.title} - ${song.album}`);
+			} else {
+				console.log(`Match found for ${song.artist} - ${song.title}`);
+			}
 			await dbService.setSpotifyId(song, trackInfo);
 		} catch (e) {
 			console.log(`Error matching song ${song.title}`, e);

@@ -26,10 +26,11 @@ exports.persistSong = (metadata) => {
 exports.findSongsToMatch = () => {
 	return Song.findAll({
 		where: {
-			match: true, 
-			matched: false, 
-			synced: false, 
-		}, 
+			match: true,
+			matched: false,
+			synced: false,
+			spotifyAlts: { [Op.is]: null }
+		},
 	});
 };
 
@@ -47,8 +48,8 @@ exports.setSpotifyId = (song, item) => {
 exports.findSongsToSync = () => {
 	return Song.findAll({
 		where: {
-			matched: true, 
-			sync: true, 
+			matched: true,
+			sync: true,
 			synced: false
 		}
 	});
@@ -73,24 +74,24 @@ exports.findSongsToManuallyValidate = (query) => {
 	const offset = page ? +page * limit : 0;
 
 	let condition = {
-		match: true, 
-		matched: false, 
-		synced: false, 
-		spotifyAlts: { [Op.not]: null}
+		match: true,
+		matched: false,
+		synced: false,
+		spotifyAlts: { [Op.not]: null }
 	};
 
-	if(artist) {
+	if (artist) {
 		condition.artist = { [Op.like]: `%${artist}%` };
 	}
 
-	if(title) {
+	if (title) {
 		condition['title'] = { [Op.like]: `%${title}%` };
 	}
 
-	return Song.findAll({
-		limit: limit, 
-		offset: offset, 
-		where: condition, 
+	return Song.findAndCountAll({
+		limit: limit,
+		offset: offset,
+		where: condition,
 		order: [['artist', 'ASC'], ['title', 'ASC']]
 	});
 };
@@ -98,7 +99,7 @@ exports.findSongsToManuallyValidate = (query) => {
 exports.setMatched = (songId, spotifyId) => {
 	return Song.update(
 		{
-			spotifyId: spotifyId, 
+			spotifyId: spotifyId,
 			matched: true
 		},
 		{

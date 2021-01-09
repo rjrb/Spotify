@@ -32,7 +32,6 @@ exports.extractTrackInfo = (song, items) => {
 		return [];
 	}
 	if (items.length > 1 && !this.allItemsSameSong(items)) {
-		console.log(`Multiple options available for ${song.title}`);
 		return items.map(item => this.createTrackInfo(item));
 	} else {
 		return this.createTrackInfo(items[0]);
