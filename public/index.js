@@ -18,6 +18,7 @@ class Spotify {
         $("#register-songs").click(() => this.markSavedSongs());
         $("#button-prev").click(() => this.prevManual());
         $("#button-next").click(() => this.nextManual());
+        $("#button-search").click(() => this.manualSearch());
 
         $.getJSON(`${this.baseUrl}/token`)
             .then(message => {
@@ -87,8 +88,11 @@ class Spotify {
 
             $("#info-id").val(song.id);
             $("#info-artist").text(song.artist);
+            $("#search-artist").val(song.artist);
             $("#info-title").text(song.title);
+            $("#search-title").val(song.title);
             $("#info-album").text(song.album);
+            $("#search-album").val(song.album);
             $("#info-genre").text(song.genre);
             $("#info-year").text(song.year);
 
@@ -107,7 +111,6 @@ class Spotify {
         if (!confirm("Sure you want to mark as matched this song?")) {
             return;
         }
-        console.log(songId, spotifyId);
         
         try {
 
@@ -177,6 +180,36 @@ class Spotify {
         ;
     }
 
+    async manualSearch() {
+        const songId = $("#info-id").val();
+        const artist = $("#search-artist").val();
+        const title = $("#search-title").val();
+        const album = $("#search-album").val();
+
+        const urlParams = new URLSearchParams();
+        urlParams.append("songId", songId);
+        urlParams.append("artist", artist);
+        urlParams.append("title", title);
+        urlParams.append("album", album);
+
+        this.showLoading(true);
+        $.getJSON(`${this.baseUrl}/search?${urlParams.toString()}`)
+            .then(response => {
+                console.log(response);
+                $("#info-alts").empty();
+                response.forEach(spotifyAlt => $("#info-alts").append(this.generateListGroupItem(songId, spotifyAlt)));
+                $('#manual-match-modal').modal('handleUpdate');
+            })
+            .catch(error => {
+                console.log(error);
+                alert(`${error.responseJSON.message}`);
+            })
+            .always(() => 
+                this.showLoading(false)
+            )
+        ;
+    }
+
     changeStatus(inProcess) {
         this.showLoading(inProcess);
         this.disableButtons(inProcess)
@@ -213,13 +246,13 @@ class Spotify {
                             <button class="btn btn-primary btn-block" onclick="window.spotify.setSongMatched('${songId}', '${spotifyInfo.id}')">
                                 Match
                             </button>
-                            <button class="btn btn-outline-success btn-block" onclick="window.spotify.playSong('${spotifyInfo.id}')">
+                            <button class="btn btn-outline-info btn-block" onclick="window.spotify.playSong('${spotifyInfo.id}')">
                                 Play
                             </button>
                         </div>
                     </div>
                 </div>
-            </button>
+            </div>
         `;
     }
 

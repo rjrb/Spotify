@@ -87,8 +87,22 @@ exports.playSongInSpotifyPlayer = async (req, res) => {
 		await playUseCase.playSong(spotifyId);
 		res.status(204).json();
 	} catch (e) {
-		console.log(Object.keys(e));
 		const errorMessage = `Error requesting to play song: ${spotifyId} -> ${e.response.status} - ${e.response.data.error.message} - ${e.response.data.error.reason}`;
+		console.log(errorMessage);
+		console.log(e);
+		res.status(e.response.status).send({ message: errorMessage, error: e });
+	}
+};
+
+exports.searchSong = async (req, res) => {
+	try {
+		const tracks = await manualUseCase.searchSong(req.query);
+		if (tracks == null) {
+			return res.status(404).json({ message: "Song not found", error: "No match for your input criteria" });
+		}
+		res.status(200).json(tracks);
+	} catch (e) {
+		const errorMessage = `Error searching song: ${req.query} -> ${e.response.status} - ${e.response.data.error.message} - ${e.response.data.error.reason}`;
 		console.log(errorMessage);
 		console.log(e);
 		res.status(e.response.status).send({ message: errorMessage, error: e });

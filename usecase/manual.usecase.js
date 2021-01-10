@@ -1,5 +1,8 @@
 const dbService = require("../service/db.service");
+const matchUseCase = require("../usecase/match.usecase");
+const { localStorage } = require("../config/storage.config");
 const { CompareInfo } = require('../model/compare.model');
+const { TrackInfo } = require('../model/track.model');
 
 
 exports.getSongsToManuallyValidate = async (query) => {
@@ -15,4 +18,13 @@ exports.getSongsToManuallyValidate = async (query) => {
 
 exports.setMatchedSong = async (songId, spotifyId) => {
 	await dbService.setMatched(songId, spotifyId);
+};
+
+exports.searchSong = async (query) => {
+	if (!localStorage.getItem("access_token")) {
+		throw "You must login first";
+	}
+
+	const song = new TrackInfo(query.id, query.artist, query.title, query.album, null);
+	return await matchUseCase.getSongMetadataFromSpotify(song);
 };

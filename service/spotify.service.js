@@ -1,12 +1,11 @@
 const axios = require('axios');
-const querystring = require('querystring');
 const { TrackInfo } = require('../model/track.model');
 const { SimpleTrackInfo } = require('../model/simple.model');
 const isEqual = require('lodash.isequal');
 
 exports.searchSong = (song, access_token) => {
 	let urlGet = "https://api.spotify.com/v1/search?" +
-		`q=artist:${this.prepareForQuery(song.artist)}+track:${this.prepareForQuery(song.title)}+album:${this.prepareForQuery(song.album)}` +
+		`q=${this.createSpotifyQuery(song)}` +
 		`&` +
 		`type=track` +
 		`&` +
@@ -90,6 +89,20 @@ exports.playSong = (spotifyId, access_token) => {
 			}
 		})
 	;
+};
+
+exports.createSpotifyQuery = (song) => {
+	let parts = [];
+	if(song.artist) {
+		parts.push(`artist:${this.prepareForQuery(song.artist)}`)
+	}
+	if(song.title) {
+		parts.push(`track:${this.prepareForQuery(song.title)}`)
+	}
+	if(song.album) {
+		parts.push(`album:${this.prepareForQuery(song.album)}`)
+	}
+	return parts.join("+");
 };
 
 const regexSpecialChars = /\W|&/gi;

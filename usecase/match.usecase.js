@@ -12,13 +12,12 @@ exports.matchSongsWithSpotify = async () => {
 
 	for (const song of songs) {
 		try {
-			let spotifyInfo = await spotifyService.searchSong(song, localStorage.getItem("access_token"));
-			if (spotifyInfo.length == 0) {
+			let trackInfo = this.getSongMetadataFromSpotify(song);
+			if (trackInfo == null || trackInfo.length == 0) {
 				console.log(`No match for ${song.artist} - ${song.title} - ${song.album}`);
 				continue;
 			}
-			let trackInfo = spotifyService.extractTrackInfo(spotifyInfo);
-			if(Array.isArray(trackInfo)) {
+			if (Array.isArray(trackInfo)) {
 				console.log(`Multiple options available for ${song.artist} - ${song.title} - ${song.album}`);
 			} else {
 				console.log(`Match found for ${song.artist} - ${song.title}`);
@@ -30,4 +29,12 @@ exports.matchSongsWithSpotify = async () => {
 	}
 
 	return songs.length;
+};
+
+exports.getSongMetadataFromSpotify = async (song) => {
+	let spotifyInfo = await spotifyService.searchSong(song, localStorage.getItem("access_token"));
+	if (spotifyInfo.length == 0) {
+		return null;
+	}
+	return spotifyInfo.map(item => spotifyService.createTrackInfo(item));
 };
