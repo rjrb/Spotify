@@ -85,9 +85,12 @@ exports.playSongInSpotifyPlayer = async (req, res) => {
 
 	try {
 		await playUseCase.playSong(spotifyId);
+		res.status(204).json();
 	} catch (e) {
-		const errorMessage = `Error requesting song to play ${spotifyId}`;
-		console.error(errorMessage, e);
-		res.status(500).send({ message: errorMessage, error: e });
+		console.log(Object.keys(e));
+		const errorMessage = `Error requesting to play song: ${spotifyId} -> ${e.response.status} - ${e.response.data.error.message} - ${e.response.data.error.reason}`;
+		console.log(errorMessage);
+		console.log(e);
+		res.status(e.response.status).send({ message: errorMessage, error: e });
 	}
 };

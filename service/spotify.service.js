@@ -81,7 +81,6 @@ exports.playSong = (spotifyId, access_token) => {
 	};
 
 	const body = {uris: [`spotify:track:${spotifyId}`]};
-	console.log(body);
 
 	return axios.put(urlPut, body, options)
 		.then(response => {

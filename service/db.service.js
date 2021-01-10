@@ -77,7 +77,8 @@ exports.findSongsToManuallyValidate = async (query) => {
 		match: true,
 		matched: false,
 		synced: false,
-		spotifyAlts: { [Op.not]: null }
+		spotifyAlts: { [Op.not]: null }, 
+		genre: ['Rock']
 	};
 
 	if (artist) {

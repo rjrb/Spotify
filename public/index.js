@@ -81,9 +81,9 @@ class Spotify {
             this.showLoading(true);
 
             let songs = await $.getJSON(`${this.baseUrl}/manual/?page=${this.currentPage}&size=1`);
-            console.log(songs);
-
+            
             const song = songs.shift();
+            console.log(song);
 
             $("#info-id").val(song.id);
             $("#info-artist").text(song.artist);
@@ -114,7 +114,6 @@ class Spotify {
             this.showLoading(true);
     
             const body = { spotifyId: spotifyId };
-            console.log(songId, body);
 
             await $.ajax({
                 type: "PATCH",
@@ -126,7 +125,7 @@ class Spotify {
             $("#result-message").text("Match saved");
             $('.toast').toast('show');
 
-            this.nextManual();
+            this.getSongToMatch();
 
         } catch (e) {
             console.error(e);
@@ -170,9 +169,10 @@ class Spotify {
 
     async playSong(spotifyId) {
         $.post(`${this.baseUrl}/play/${spotifyId}`)
+            .then(() => console.log(`Play song request successful for ${spotifyId}`))
             .catch(error => {
                 console.log(error);
-                alert(`Error requesting to play song`);
+                alert(`${error.responseJSON.message}`);
             })
         ;
     }
@@ -221,20 +221,6 @@ class Spotify {
                 </div>
             </button>
         `;
-        /*
-        return `
-            <button type="button" class="list-group-item list-group-item-action" onclick="window.spotify.setSongMatched('${songId}', '${spotifyInfo.id}')">
-                <div class="container">
-                    <dl class="row">
-                        <dt class="col-sm-2">Artist:</dt><dd class="col-sm-10">${spotifyInfo.artist}</dd>
-                        <dt class="col-sm-2">Title:</dt><dd class="col-sm-10">${spotifyInfo.title}</dd>
-                        <dt class="col-sm-2">Album:</dt><dd class="col-sm-10">${spotifyInfo.album}</dd>
-                        <dt class="col-sm-2">Year:</dt><dd class="col-sm-10">${spotifyInfo.year}</dd>
-                    </dl>
-                </div>
-            </button>
-        `;
-        */
     }
 
 }
