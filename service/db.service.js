@@ -49,6 +49,7 @@ exports.findSongsToSync = () => {
 	return Song.findAll({
 		where: {
 			matched: true,
+			spotifyId: { [Op.not]: null },
 			sync: true,
 			synced: false
 		}
@@ -77,8 +78,7 @@ exports.findSongsToManuallyValidate = async (query) => {
 		match: true,
 		matched: false,
 		synced: false,
-		spotifyAlts: { [Op.not]: null }, 
-		genre: ['Rock']
+//		spotifyAlts: { [Op.not]: null },
 	};
 
 	if (artist) {
@@ -98,8 +98,8 @@ exports.findSongsToManuallyValidate = async (query) => {
 
 	return {
 		items: result.rows,
-		totalItems: result.count, 
-		currentPage: page, 
+		totalItems: result.count,
+		currentPage: page,
 		totalPages: Math.ceil(result.count / limit),
 		size: size
 	};

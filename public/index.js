@@ -97,6 +97,9 @@ class Spotify {
             $("#info-year").text(song.year);
 
             $("#info-alts").empty();
+            if(!song.spotifyAlts) {
+                return;
+            }
             song.spotifyAlts.forEach(spotifyAlt => $("#info-alts").append(this.generateListGroupItem(song.id, spotifyAlt)));
 
         } catch (e) {

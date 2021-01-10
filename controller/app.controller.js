@@ -49,9 +49,10 @@ exports.markSavedSongsInSpotify = async (req, res) => {
 		let total = await saveUseCase.markSavedSongsInSpotify();
 		res.status(200).json({ message: "Success marking saved songs in Spotify", size: total });
 	} catch (e) {
-		const errorMessage = "Error matching songs against Spotify";
-		console.error(errorMessage, e);
-		res.status(500).json({ message: errorMessage, error: e });
+		const errorMessage = `Error marking songs as saved in Spotify -> ${e.response.status} - ${e.response.data.error.message} - ${e.response.data.error.reason}`;
+		console.log(errorMessage);
+		console.log(e);
+		res.status(e.response.status).send({ message: errorMessage, error: e });
 	}
 };
 

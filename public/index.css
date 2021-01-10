@@ -5,3 +5,13 @@ body {
 h5, .page-title {
     font-family: 'Montserrat', sans-serif;
 }
+
+.modal-dialog {
+    width: 98%;
+    height: 92%;
+    padding: 0;
+}
+
+.modal-content {
+    height: 99%;
+}
