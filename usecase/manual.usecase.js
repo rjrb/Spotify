@@ -11,9 +11,9 @@ exports.getSongsToManuallyValidate = async (query) => {
 	let { totalItems, currentPage, totalPages, size } = songs;
 	console.log(totalItems, currentPage, totalPages, size);
 
-	let compareItems = songs.items.map(song => new CompareInfo(song.id, song.artist, song.title, song.album, song.genre, song.year, JSON.parse(song.spotifyAlts)));
+	songs.items = songs.items.map(song => new CompareInfo(song.id, song.artist, song.title, song.album, song.genre, song.year, JSON.parse(song.spotifyAlts)));
 
-	return compareItems;
+	return songs;
 };
 
 exports.setMatchedSong = async (songId, spotifyId) => {

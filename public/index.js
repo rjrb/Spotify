@@ -8,6 +8,7 @@ class Spotify {
         this.baseUrl = "http://localhost:8888/spotify";
         console.log(this.baseUrl);
         this.currentPage = 0;
+        this.totalPages = Number.POSITIVE_INFINITY;
         this.initialize();
     }
 
@@ -81,9 +82,11 @@ class Spotify {
         try {
             this.showLoading(true);
 
-            let songs = await $.getJSON(`${this.baseUrl}/manual/?page=${this.currentPage}&size=1`);
+            let page = await $.getJSON(`${this.baseUrl}/manual/?page=${this.currentPage}&size=1`);
+            this.currentPage = page.currentPage;
+            this.totalPages = page.totalPages;
             
-            const song = songs.shift();
+            const song = page.items.shift();
             console.log(song);
 
             $("#info-id").val(song.id);
@@ -150,6 +153,9 @@ class Spotify {
     }
 
     async nextManual() {
+        if(this.currentPage >= this.totalPages - 1) {
+            this.currentPage = -1;
+        }
         this.currentPage++;
         this.getSongToMatch();
     }
