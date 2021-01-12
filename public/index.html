@@ -82,7 +82,7 @@
             <div class="modal-dialog modal-dialog-scrollable modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Manually match song</h5>
+                        <h5 class="modal-title"><em class="fas fa-hands-helping"></em> Manually match song</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -92,11 +92,17 @@
                             <div class="row">
                                 <div class="col-sm-4">
                                     <div class="position-fixed" style="width: 350px;">
-                                        <div class="row mb-3">
+                                        <div class="row mb-4">
                                             <div class="col-1"></div>
-                                            <button id="button-prev" type="button" class="col-4 btn btn-dark btn-sm">Previous</button>
+                                            <button id="button-prev" type="button" class="col-4 btn btn-dark btn-sm">
+                                                <em class="fas fa-chevron-left mr-2"></em>
+                                                Previous
+                                            </button>
                                             <div class="col-1"></div>
-                                            <button id="button-next" type="button" class="col-4 btn btn-dark btn-sm">Next</button>
+                                            <button id="button-next" type="button" class="col-4 btn btn-dark btn-sm">
+                                                Next
+                                                <em class="fas fa-chevron-right ml-2"></em>
+                                            </button>
                                             <div class="col-2"></div>
                                         </div>
                                         
@@ -134,7 +140,10 @@
                                                     <label for="search-album">Album</label>
                                                     <input type="text" class="form-control form-control-sm" id="search-album">
                                                 </div>
-                                                <button type="button" class="btn btn-success" id="button-search">Search</button>
+                                                <button type="button" class="btn btn-success" id="button-search">
+                                                    <em class="fas fa-search mr-2"></em>
+                                                    Search
+                                                </button>
                                                 </form>                                                
                                         </div>
                                     </div>
@@ -145,7 +154,7 @@
                     </div>
                     <div class="modal-footer">
                         <span id="info-status" class="text-muted mr-3"></span>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"><em class="fas fa-times"></em> Close</button>
                     </div>
                 </div>
             </div>

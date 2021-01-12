@@ -148,7 +148,7 @@ class Spotify {
 
     async prevManual() {
         if (this.currentPage <= 0) {
-            return;
+            this.currentPage = this.totalPages;
         }
         this.currentPage--;
         this.getSongToMatch();
@@ -237,6 +237,7 @@ class Spotify {
     disableButtons(disable) {
         $("#load-songs").prop('disabled', disable);
         $("#match-songs").prop('disabled', disable);
+        $("#manual-match").prop('disabled', disable);
         $("#register-songs").prop('disabled', disable);
     }
 
@@ -245,7 +246,7 @@ class Spotify {
             <div class="list-group-item list-group-item-action" >
                 <div class="container">
                     <div class="row">
-                        <div class="col-sm-10">
+                        <div class="col-sm-9">
                             <dl class="row">
                                 <dt class="col-sm-2">Artist:</dt><dd class="col-sm-10">${spotifyInfo.artist}</dd>
                                 <dt class="col-sm-2">Title:</dt><dd class="col-sm-10">${spotifyInfo.title}</dd>
@@ -253,11 +254,13 @@ class Spotify {
                                 <dt class="col-sm-2">Year:</dt><dd class="col-sm-10">${spotifyInfo.year}</dd>
                             </dl>
                         </div>
-                        <div class="col-sm-2 d-dlex flex-column align-items-center h-100">
+                        <div class="col-sm-3 d-dlex flex-column align-items-center h-100">
                             <button class="btn btn-primary btn-block" onclick="window.spotify.setSongMatched('${songId}', '${spotifyInfo.id}')">
+                                <em class="fas fa-check mr-2"></em>
                                 Match
                             </button>
                             <button class="btn btn-outline-info btn-block" onclick="window.spotify.playSong('${spotifyInfo.id}')">
+                                <em class="fas fa-play mr-2 "></em>
                                 Play
                             </button>
                         </div>
