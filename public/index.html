@@ -116,31 +116,27 @@
                                             <div class="col-sm-3 font-weight-bold">Year:</div><div class="col-sm-7" id="info-year"></div>
                                         </div>
 
-                                        <div class="row my-4">
-                                            <a class="btn btn-link" data-toggle="collapse" href="#collapsableSearchForm" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                                Search again for matches
-                                            </a>
+                                        <hr class="my-4 mr-5" />
+
+                                        <h5 class="mb-3 text-secondary">Search again</h5>
+                                        <div class="pr-5 w-100">
+                                            <form>
+                                                <input type="hidden" id="info-id" />
+                                                <div class="form-group">
+                                                    <label for="search-artist">Artist</label>
+                                                    <input type="text" class="form-control form-control-sm" id="search-artist">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="search-title">Title</label>
+                                                    <input type="text" class="form-control form-control-sm" id="search-title">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="search-album">Album</label>
+                                                    <input type="text" class="form-control form-control-sm" id="search-album">
+                                                </div>
+                                                <button type="button" class="btn btn-success" id="button-search">Search</button>
+                                                </form>                                                
                                         </div>
-                                        <div class="row collapse" id="collapsableSearchForm">
-                                            <div class="pr-5 w-100">
-                                                <form>
-                                                    <input type="hidden" id="info-id" />
-                                                    <div class="form-group">
-                                                        <label for="search-artist">Artist</label>
-                                                        <input type="text" class="form-control form-control-sm" id="search-artist">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="search-title">Title</label>
-                                                        <input type="text" class="form-control form-control-sm" id="search-title">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="search-album">Album</label>
-                                                        <input type="text" class="form-control form-control-sm" id="search-album">
-                                                    </div>
-                                                    <button type="button" class="btn btn-success" id="button-search">Search</button>
-                                                  </form>                                                
-                                            </div>
-                                        </div>                                        
                                     </div>
                                 </div>
                                 <div id="info-alts" class="list-group col-sm-8"></div>
@@ -148,6 +144,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <span id="info-status" class="text-muted mr-3"></span>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>

@@ -99,6 +99,8 @@ class Spotify {
             $("#info-genre").text(song.genre);
             $("#info-year").text(song.year);
 
+            $("#info-status").text(`${+this.currentPage + 1} / ${this.totalPages}`);
+
             $("#info-alts").empty();
             if(!song.spotifyAlts) {
                 return;

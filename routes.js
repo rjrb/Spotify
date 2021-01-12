@@ -1,8 +1,10 @@
 const express = require("express");
 const { v4: uuidv4 } = require('uuid');
 const appController = require("./controller/app.controller");
+const { checkAccess } = require("./service/session.service");
 const router = express.Router();
 
+router.all('*', checkAccess);
 router.get("/ping", (req, res) => { res.send({ ping: uuidv4() }) });
 router.get("/login", appController.login);
 router.get("/callback", appController.callback);
