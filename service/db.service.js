@@ -78,7 +78,8 @@ exports.findSongsToManuallyValidate = async (query) => {
 		match: true,
 		matched: false,
 		synced: false,
-//		spotifyAlts: { [Op.not]: null },
+		//		spotifyAlts: { [Op.not]: null },
+		genre: { [Op.not]: ['Clásica', 'Classical'] },
 	};
 
 	if (artist) {
@@ -117,4 +118,23 @@ exports.setMatched = (songId, spotifyId) => {
 			}
 		}
 	);
+};
+
+exports.getGenres = () => {
+	return Song.findAll({
+		attributes: ['genre'],
+		group: ['genre'],
+		order: [['genre', 'ASC']]
+	});
+};
+
+exports.getSongsByGenre = (genre) => {
+	return Song.findAll({
+		where: {
+			genre: genre,
+			matched: true,
+			spotifyId: { [Op.not]: null }
+		},
+		order: [['artist', 'ASC'], ['title', 'ASC']]
+	});
 };

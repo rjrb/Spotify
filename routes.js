@@ -17,5 +17,7 @@ router.get("/manual", appController.getSongsToManuallyValidate);
 router.patch("/songs/:id", appController.setMatchedSong);
 router.post("/play/:id", appController.playSongInSpotifyPlayer);
 router.get("/search", appController.searchSong);
+router.get("/genres", appController.getGenres);
+router.post("/playlist", appController.createPlaylistAndAddSongs);
 
 module.exports = router;

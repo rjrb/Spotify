@@ -21,7 +21,7 @@ exports.checkAccess = async (req, res, next) => {
 			console.log(successMessage);
 		} catch (e) {
 			console.error(e);
-			return res.send(e.error).send({ message: "Unauthorized" });
+			return res.status(e.error).send({ message: "Unauthorized" });
 		}
 	}
 

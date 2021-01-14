@@ -47,15 +47,18 @@
                 <div class="card">
                     <h5 class="card-header"><em class="fas fa-database"></em> Load songs into database</h5>
                     <div class="card-body">
-                        <p class="card-text">Load your music files into the local database for processing, by inspecting
-                            their ID tags.</p>
-                        <button type="button" class="btn btn-primary rounded-pill" id="load-songs">Load songs</button>
+                        <p class="card-text">Load your music files into the local database for processing, by inspecting their ID tags.</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <button type="button" class="btn btn-primary rounded-pill" id="load-songs">Load songs</button>    
                     </div>
                 </div>
                 <div class="card">
                     <h5 class="card-header"><em class="fas fa-sync-alt"></em> Match songs with Spotify</h5>
                     <div class="card-body">
                         <p class="card-text">Match the songs from your collection with the Spotify respective one.</p>
+                    </div>
+                    <div class="card-footer text-center">
                         <button type="button" class="btn btn-primary rounded-pill" id="match-songs">Match songs</button>
                     </div>
                 </div>
@@ -63,14 +66,33 @@
                     <h5 class="card-header"><em class="fas fa-hands-helping"></em> Manually match songs</h5>
                     <div class="card-body">
                         <p class="card-text">Manually match the songs based on the options found in Spotify.</p>
-                        <button type="button" class="btn btn-primary rounded-pill" id="manual-match">Manual match</button>
+                    </div>
+                    <div class="card-footer text-center">
+                        <button type="button" class="btn btn-primary rounded-pill" id="manual-match">Manual match</button> 
                     </div>
                 </div>
                 <div class="card">
                     <h5 class="card-header"><em class="fas fa-bookmark"></em> Mark songs in Spotify</h5>
                     <div class="card-body">
                         <p class="card-text">Register your songs as 'saved' or 'liked' in your Spotify account.</p>
+                    </div>
+                    <div class="card-footer text-center">
                         <button type="button" class="btn btn-primary rounded-pill" id="register-songs">Register saved songs</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h5 class="card-header"><em class="fas fa-bookmark"></em> Manage playlists for genres</h5>
+                    <div class="card-body">
+                        <p class="card-text">Create an Spotify playlist for a genre and add songs to it.</p>
+                        <div class="form-group row">
+                            <label for="list-genres" class="col-sm-4 col-form-label">Genres:</label>
+                            <div class="col-sm-8">
+                                <select id="list-genres" class="custom-select"></select>
+                            </div>                            
+                        </div>
+                    </div>
+                    <div class="card-footer text-center">
+                        <button type="button" class="btn btn-primary rounded-pill" id="create-playlist">Create playlist</button>
                     </div>
                 </div>
             </div>

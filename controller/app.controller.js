@@ -4,7 +4,8 @@ const loadUseCase = require("../usecase/load.usecase");
 const matchUseCase = require("../usecase/match.usecase");
 const saveUseCase = require("../usecase/save.usecase");
 const manualUseCase = require("../usecase/manual.usecase");
-const playUseCase = require("../usecase/player.usecase");
+const playerUseCase = require("../usecase/player.usecase");
+const playlistUseCase = require("../usecase/playlist.usecase");
 
 
 exports.isTokenValid = async (req, res) => {
@@ -85,7 +86,7 @@ exports.playSongInSpotifyPlayer = async (req, res) => {
 	const spotifyId = req.params.id;
 
 	try {
-		await playUseCase.playSong(spotifyId);
+		await playerUseCase.playSong(spotifyId);
 		res.status(204).json();
 	} catch (e) {
 		const errorMessage = `Error requesting to play song: ${spotifyId} -> ${e.response.status} - ${e.response.data.error.message} - ${e.response.data.error.reason}`;
@@ -107,5 +108,31 @@ exports.searchSong = async (req, res) => {
 		console.log(errorMessage);
 		console.log(e);
 		res.status(e.response.status).send({ message: errorMessage, error: e });
+	}
+};
+
+exports.getGenres = async (req, res) => {
+	try {
+		let genres = await playlistUseCase.getGenres();
+		res.status(200).json(genres);
+	} catch (e) {
+		const errorMessage = `Error fetching genres`;
+		console.log(errorMessage);
+		console.log(e);
+		res.status(500).send({ message: errorMessage, error: e });
+	}
+};
+
+exports.createPlaylistAndAddSongs = async (req, res) => {
+	console.log(req.body);
+	try {
+		let result = await playlistUseCase.createAndAddSongsToPlaylist(req.body.name, req.body.description);
+		console.log(result);
+		res.status(result.status).json({ message: result.message });
+	} catch (e) {
+		const errorMessage = `Error creating playlist: ${JSON.stringify(req.body)} / Adding songs`;
+		console.log(errorMessage);
+		console.log(e);
+		res.status(e.status).json({ message: errorMessage, error: e });
 	}
 };

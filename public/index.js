@@ -17,6 +17,7 @@ class Spotify {
         $("#match-songs").click(() => this.matchSongs());
         $("#manual-match").click(() => this.manualMatch());
         $("#register-songs").click(() => this.markSavedSongs());
+        $("#create-playlist").click(() => this.createPlaylist());
         $("#button-prev").click(() => this.prevManual());
         $("#button-next").click(() => this.nextManual());
         $("#button-search").click(() => this.manualSearch());
@@ -32,6 +33,19 @@ class Spotify {
                 this.disableButtons(true);
             })
             .always(() => $("#loading").hide())
+        ;
+
+        $.getJSON(`${this.baseUrl}/genres`)
+            .then(genres => {
+                console.log(genres);
+                genres.forEach(genre => {
+                    $("#list-genres").append($('<option></option>').attr('value', genre).text(genre));
+                });
+            })
+            .catch(err => {
+                console.log("Error fetching genres", err.responseJSON.message, err.status);
+                console.error(err);
+            })
         ;
     }
 
@@ -217,6 +231,39 @@ class Spotify {
             })
             .always(() => 
                 this.showLoading(false)
+            )
+        ;
+    }
+
+    async createPlaylist() {
+        const genre = $("#list-genres").val();
+        if (!confirm(`Sure you want to create a playlist for the genre ${genre} in Spotify?`)) {
+            return;
+        }
+
+        const body = {
+            name: genre,
+            description: `Playlist for genre ${genre}`
+        };
+        console.log(body);
+
+        this.changeStatus(true);
+        $.ajax({
+                type: "POST",
+                url: `${this.baseUrl}/playlist`,
+                data: JSON.stringify(body),
+                contentType: "application/json"
+            })
+            .then(response => {
+                console.log(response);
+                alert(`${response.message}`);
+            })
+            .catch(error => {
+                console.log(error);
+                alert(`${error.message}`);
+            })
+            .always(() => 
+                this.changeStatus(false)
             )
         ;
     }

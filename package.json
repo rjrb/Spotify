@@ -15,6 +15,7 @@
     "lodash.isequal": "^4.5.0",
     "music-metadata": "^7.6.1",
     "node-localstorage": "^2.1.6",
+    "nodemon": "^2.0.7",
     "querystring": "^0.2.0",
     "sequelize": "^6.3.5",
     "sqlite3": "^5.0.0",
