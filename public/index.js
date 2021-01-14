@@ -47,6 +47,14 @@ class Spotify {
                 console.error(err);
             })
         ;
+
+        $('#search-artist, #search-title, #search-album').keyup(e => {
+            if(e.keyCode === 13) {
+                this.manualSearch();
+                e.preventDefault();
+            }
+        });
+
     }
 
     async loadSongs() {
