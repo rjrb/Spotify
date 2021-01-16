@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "description": "App to sync my songs as 'saved songs' on Spotify",
   "main": "app.js",
+  "scripts": {
+    "start": "nodemon --trace-warnings --delay 3 app.js"
+  },
   "private": true,
   "dependencies": {
     "axios": "^0.21.1",

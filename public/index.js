@@ -32,7 +32,10 @@ class Spotify {
                 console.error(err);
                 this.disableButtons(true);
             })
-            .always(() => $("#loading").hide())
+            .always(() => {
+                $("#loading").hide();
+                $("#search-load").hide();
+            })
         ;
 
         $.getJSON(`${this.baseUrl}/genres`)
@@ -226,6 +229,8 @@ class Spotify {
         urlParams.append("album", album);
 
         this.showLoading(true);
+        $("#search-logo").hide();
+        $("#search-load").show();
         $.getJSON(`${this.baseUrl}/search?${urlParams.toString()}`)
             .then(response => {
                 console.log(response);
@@ -237,9 +242,11 @@ class Spotify {
                 console.log(error);
                 alert(`${error.responseJSON.message}`);
             })
-            .always(() => 
-                this.showLoading(false)
-            )
+            .always(() => {
+                this.showLoading(false);
+                $("#search-logo").show();
+                $("#search-load").hide();
+            })
         ;
     }
 
