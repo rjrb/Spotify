@@ -136,3 +136,13 @@ exports.createPlaylistAndAddSongs = async (req, res) => {
 		res.status(e.status).json({ message: errorMessage, error: e });
 	}
 };
+
+exports.getLastPageVisited = async (req, res) => {
+	try {
+		let lastPage = manualUseCase.getLastPageVisited();
+		res.status(200).json({ message: lastPage });
+	} catch (e) {
+		console.log(e);
+		res.status(500).json({ message: "Error restoring last page visited", error: e });
+	}
+};

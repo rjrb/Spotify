@@ -19,5 +19,6 @@ router.post("/play/:id", appController.playSongInSpotifyPlayer);
 router.get("/search", appController.searchSong);
 router.get("/genres", appController.getGenres);
 router.post("/playlist", appController.createPlaylistAndAddSongs);
+router.get("/last", appController.getLastPageVisited);
 
 module.exports = router;

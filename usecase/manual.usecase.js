@@ -12,6 +12,7 @@ exports.getSongsToManuallyValidate = async (query) => {
 	console.log(totalItems, currentPage, totalPages, size);
 
 	songs.items = songs.items.map(song => new CompareInfo(song.id, song.artist, song.title, song.album, song.genre, song.year, JSON.parse(song.spotifyAlts)));
+	localStorage.setItem("last_page_visited", currentPage);
 
 	return songs;
 };
@@ -27,4 +28,12 @@ exports.searchSong = async (query) => {
 
 	const song = new TrackInfo(query.id, query.artist, query.title, query.album, null);
 	return await matchUseCase.getSongMetadataFromSpotify(song);
+};
+
+exports.getLastPageVisited = () => {
+	if (!localStorage.getItem("last_page_visited")) {
+		return 0;
+	}
+
+	return +localStorage.getItem("last_page_visited");
 };

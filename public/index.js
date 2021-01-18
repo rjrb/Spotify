@@ -51,6 +51,17 @@ class Spotify {
             })
         ;
 
+        $.getJSON(`${this.baseUrl}/last`)
+            .then(response => {
+                console.log(response);
+                this.currentPage = response.message;
+            })
+            .catch(err => {
+                console.log("Error fetching last page visited", err.responseJSON.message, err.status);
+                console.error(err);
+            })
+        ;
+
         $('#search-artist, #search-title, #search-album').keyup(e => {
             if(e.keyCode === 13) {
                 this.manualSearch();
